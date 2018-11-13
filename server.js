@@ -1,5 +1,9 @@
 const express= require('express')
 
+const {
+    db
+  } = require('./db/index.js')
+  
 
 const app= express()
 
@@ -12,6 +16,11 @@ app.get('/',function(req,res){
     res.send("hello world")
 })
 
-app.listen(3939,()=>{
-    console.log("sever started at 3939")
-})
+db.sync()
+  .then(() => {
+    console.log('Database synced')
+    app.listen(3939, () => {
+      console.log('Server started http://localhost:3939')
+    })
+  })
+  .catch(console.error)
