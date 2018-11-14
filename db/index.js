@@ -12,6 +12,16 @@ var test = db.authenticate()
         console.log(err);
     })
     .done();
+  
+    const User=db.define('user',user);
+    const UserDetails=db.define('userdetail',userdetail);
+    UserDetails.belongsTo(User);
+    User.hasOne(UserDetails);
+   
     module.exports= {
         db,
+        User,
+        UserDetails
     }
+
+   
