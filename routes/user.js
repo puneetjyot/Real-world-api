@@ -47,7 +47,7 @@ route.post('/users', validateUsername,validatePassword,validateEmail,async (req,
 
 
 route.post('/users/login',
-passport.authenticate('local',{failureRedirect:'../login',successRedirect:'../users',failureFlash:true}),
+passport.authenticate('local',{failureRedirect:'../login',successRedirect:'../user',failureFlash:true}),
 async(req,res)=>{
 
 
@@ -65,7 +65,7 @@ async(req,res)=>{
 
 })
 
-route.get('/users', async function(req, res) {
+route.get('/user', async function(req, res) {
  
   let userid,email
  if(!req.headers.token){
@@ -79,7 +79,7 @@ route.get('/users', async function(req, res) {
   
   console.log(Decryptedtoken.email)
   if(Decryptedtoken.email!==null){
-    await User.findOne({
+  await  User.findOne({
       where:{
         email:Decryptedtoken.email
       }
@@ -88,10 +88,9 @@ route.get('/users', async function(req, res) {
      userid=tokenuser.dataValues.user_id
      email=tokenuser.dataValues.email
     })
-
+   
   }
   else{
-    console.log("------------------")
 
   return   res.json({
     errors:{
@@ -101,7 +100,7 @@ route.get('/users', async function(req, res) {
   }
  }
   console.log(userid)
- await UserDetails.findOne({
+  await UserDetails.findOne({
   where: {
    user_id:userid
   }
@@ -127,5 +126,94 @@ route.get('/login', function(req, res) {
    body:[ req.flash().error]
   } });
 });
+
+
+route.put('/user',async function(req,res){
+
+  if(req.headers.token){
+  Decryptedtoken= decryptToken(req.headers.token);
+  
+  console.log(Decryptedtoken.email)
+  if(Decryptedtoken.email!==null){
+   const updateuser= await User.findOne({
+      where:{
+        email:Decryptedtoken.email
+      }
+    })
+    
+   const updateuserdetails= await UserDetails.findOne({
+      where:{
+        user_id:updateuser.user_id
+      } 
+     })
+     
+console.log(updateuserdetails)
+
+  
+try{
+  
+  if(req.body.email){
+    updateuser.email=req.body.email;
+  }
+  if(req.body.password)
+  {   
+
+    updateuser.password=req.body.password;
+  }
+  if(req.body.username){
+    updateuserdetails.username=req.body.username;
+  }
+ 
+  if(req.body.image){
+    updateuserdetails.image=req.body.image;
+  }
+  if(req.body.bio){
+    updateuserdetails.bio=req.body.bio;
+  }
+const updateduser=await updateuser.save();
+
+const updateduserdetails=await updateuserdetails.save();
+const usertoken=  generateToken(updateduser.email);
+
+res.status(201).json({
+  user: {
+    email: updateduser.email,
+    username: updateduserdetails.username,
+    bio: updateduserdetails.bio,
+    image: updateduserdetails.image,
+   token:usertoken
+  }
+})
+
+
+}
+catch(err){
+  res.sendStatus(500).json({
+    errors:{
+        body: err
+    }
+  })
+}
+
+  }
+  
+  else{
+
+    return   res.json({
+      errors:{
+        message:[Decryptedtoken.error]
+      }
+    })
+    }
+  }
+else{
+  return res.status(401).json({
+    errors:{
+      message:["UnAuthorised User"]
+    }
+  })
+}
+})
+
 
 module.exports = route;
