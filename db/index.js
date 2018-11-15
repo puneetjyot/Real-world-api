@@ -1,4 +1,8 @@
+const {user,userdetails}=require("./model");
+
+
 const Sequelize = require('sequelize')
+
 const db= new Sequelize({
 dialect:'sqlite',
 storage:__dirname+'data.db'
@@ -14,10 +18,10 @@ var test = db.authenticate()
     .done();
   
     const User=db.define('user',user);
-    const UserDetails=db.define('userdetail',userdetail);
-    UserDetails.belongsTo(User);
-    User.hasOne(UserDetails);
-   
+    const UserDetails=db.define('userdetail',userdetails);
+    UserDetails.belongsTo(User,{foreignKey:'user_id'});
+    User.hasOne(UserDetails,{foreignKey:'user_id'});
+   db.sync();
     module.exports= {
         db,
         User,

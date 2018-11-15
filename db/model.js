@@ -2,16 +2,16 @@ const Sequelize = require('sequelize')
 const DT = Sequelize.DataTypes;
 
 const user = {
-    userid: {
+    user_id: {
       type: DT.UUID,
       primaryKey: true,
       defaultValue: DT.UUIDV1
     },
-    username: {
-        type:DT.STRING(50),
-        allowNull:false,
-        unique:true
-            },
+    email:  {
+      type:DT.STRING(50),
+      allowNull:false,
+      unique:true
+          },
     password:{
         type:DT.STRING(50),
         allowNull:false
@@ -20,12 +20,13 @@ const user = {
   }
   
   const userdetails = {
-    userid: DT.UUID,
-    email:  {
-        type:DT.STRING(50),
-        allowNull:false,
-        unique:true
-            },
+    user_id: DT.UUID,
+    username: {
+      type:DT.STRING(50),
+      allowNull:false,
+      unique:true
+          },
+   
     bio: DT.STRING(200),
     image: DT.STRING(200)
   }
