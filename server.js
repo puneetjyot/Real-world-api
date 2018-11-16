@@ -23,6 +23,8 @@ app.use(flash(
 ))
 
 app.use('/api', require('./routes/user'))
+app.use('/api/profiles', require('./routes/profile'))
+
 app.listen(8090,()=>{
   console.log("server started")
 })

@@ -30,6 +30,7 @@ const user = {
     bio: DT.STRING(200),
     image: DT.STRING(200)
   }
+  //const fo
   
   module.exports = {
     user,

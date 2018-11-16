@@ -128,7 +128,7 @@ route.get('/login', function(req, res) {
 });
 
 
-route.put('/user',async function(req,res){
+route.put('/user',validateUsername,validatePassword,validateEmail,async function(req,res){
 
   if(req.headers.token){
   Decryptedtoken= decryptToken(req.headers.token);
