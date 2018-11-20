@@ -1,4 +1,4 @@
-const {user,userdetails}=require("./model");
+const {user,userdetails,article,tagmodel,comments}=require("./model");
 
 
 const Sequelize = require('sequelize')
@@ -23,12 +23,29 @@ var test = db.authenticate()
     User.hasOne(UserDetails,{foreignKey:'user_id'});
     User.belongsToMany(User,{as:'follower',foreignKey:'followingUserId',through:'followcontrol'})
     User.belongsToMany(User,{as:'following',foreignKey:'followerUserId',through:'followcontrol'})
+    const Article=db.define('article',article);
+    Article.belongsTo(UserDetails,{as:'author',foreignKey:'id'})
+    UserDetails.hasMany(Article ,{foreignKey:'id'})
+    const Tags=db.define('tagmodel',tagmodel)
+    Article.belongsToMany(Tags,{foreignKey:'slug',through:'articletagcontrol'})
+    Tags.belongsToMany(Article,{foreignKey:'tag',through:'articletagcontrol'})
+    Article.belongsToMany(UserDetails,{as:'favoritedBy',foreignKey:'slug',through:'FavouriteControl'})
+    UserDetails.belongsToMany(Article,{as:'favoritedArticles',foreignKey:'id',through:'FavouriteControl'})
+   Comments=db.define('comment',comments)
+     Comments.belongsTo(Article,{foreignKey:'slug'})
+     Article.hasMany(Comments,{foreignKey:'slug'})
+     Comments.belongsTo(UserDetails,{as:'author',foreignKey:'id'})
+     UserDetails.hasMany(Comments ,{foreignKey:'id'})
+
 
    db.sync();
     module.exports= {
         db,
         User,
-        UserDetails
+        UserDetails,
+        Article,
+        Tags,
+        Comments
     }
 
    

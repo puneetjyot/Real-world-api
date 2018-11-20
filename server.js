@@ -24,6 +24,9 @@ app.use(flash(
 
 app.use('/api', require('./routes/user'))
 app.use('/api/profiles', require('./routes/profile'))
+app.use('/api/articles',require('./routes/article'))
+app.use('/api/articles',require('./routes/comment'))
+app.use('/api/tags',require('./routes/tags'))
 
 app.listen(8090,()=>{
   console.log("server started")
