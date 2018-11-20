@@ -38,7 +38,7 @@ route.post('/:slug/comments',async(req,res)=>{
 
         }]
     })
-    return res.status(201).json(comment)
+    return res.status(201).json({comment})
 
     
 
@@ -147,7 +147,7 @@ route.delete('/:slug/comments/:id',async(req,res)=>{
                         }
                     })
                     return res.status(200).json({
-                        
+
                     })
                 }
                 else{

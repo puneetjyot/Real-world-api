@@ -28,10 +28,10 @@ route.post('/', async (req, res) => {
 
                 const newarticle = await Article.create({
                     id: userdetails.id,
-                    title: req.body.title,
-                    slug: Slug(req.body.title),
-                    description: req.body.description,
-                    body: req.body.body,
+                    title: req.body.article.title,
+                    slug: Slug(req.body.article.title),
+                    description: req.body.article.description,
+                    body: req.body.article.body,
                 })
                 let article = await Article.findOne({
                     where: {
@@ -43,7 +43,7 @@ route.post('/', async (req, res) => {
                         attributes: ['username', 'bio', 'image']
                     }]
                 })
-                let taglist = req.body.tagList
+                let taglist = req.body.article.tagList
                 if (taglist) {
                     for (let singletag of taglist) {
                         const newtags = await Tags.findOrCreate({

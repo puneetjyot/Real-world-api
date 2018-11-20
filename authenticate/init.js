@@ -26,6 +26,7 @@ passport.use(new LocalStrategy({
   function (username, password, done) {
     User.findOne({
       where: {
+
         email: username,
         password:password
       }

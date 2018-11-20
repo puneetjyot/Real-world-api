@@ -8,21 +8,22 @@ const { User, UserDetails }  = require('../db/index');
 const jwt = require('jsonwebtoken')
 
 route.post('/users', validateUsername,validatePassword,validateEmail,async (req, res) => {
-
   const userid= await generateUUID();
-  const usertoken= await generateToken(req.body.email);
-  
+  const usertoken= await generateToken(req.body.user.email);
+  console.log(req.body.user.email)
+
   try {
     const registerUser = await User.create({
-      email: req.body.email,
-      password: req.body.password,
+      email: req.body.user.email,
+      password: req.body.user.password,
       user_id: userid,
 
     })
+    console.log(req.body.user.username)
 
     const registerUserDetails = await UserDetails.create({
       user_id: userid,
-      username: req.body.username
+      username: req.body.user.username
     })
 
     res.status(201).json({
@@ -152,23 +153,23 @@ console.log(updateuserdetails)
   
 try{
   
-  if(req.body.email){
-    updateuser.email=req.body.email;
+  if(req.body.user.email){
+    updateuser.email=req.body.user.email;
   }
-  if(req.body.password)
+  if(req.body.user.password)
   {   
 
-    updateuser.password=req.body.password;
+    updateuser.password=req.body.user.password;
   }
-  if(req.body.username){
-    updateuserdetails.username=req.body.username;
+  if(req.body.user.username){
+    updateuserdetails.username=req.body.user.username;
   }
  
-  if(req.body.image){
-    updateuserdetails.image=req.body.image;
+  if(req.body.user.image){
+    updateuserdetails.image=req.body.user.image;
   }
-  if(req.body.bio){
-    updateuserdetails.bio=req.body.bio;
+  if(req.body.user.bio){
+    updateuserdetails.bio=req.body.user.bio;
   }
 const updateduser=await updateuser.save();
 
