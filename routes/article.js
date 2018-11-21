@@ -167,10 +167,12 @@ route.get('/:slug', async (req, res) => {
             return tag.tag
         })
         let isFavorited = await userDetails.hasFavoritedArticle(article);
-
+        let favoriteCount= await article.countFavoritedBy();
         article = article.toJSON();
         article.favorited = isFavorited;
         article.tagList = tags;
+        article.favoriteCount=favoriteCount
+
         article.article_id = undefined;
         article.user_id = undefined;
         article.author.following = isFollowing;
@@ -493,9 +495,13 @@ route.get('/', async (req, res) => {
             })
             let isFavorited = await userdetails.hasFavoritedArticle(article);
           //  console.log(userdetails.__proto__)
+          let favoriteCount= await article.countFavoritedBy();
+
             article = article.toJSON();
             article.favorited = isFavorited
             article.tagList = tags;
+            article.favoriteCount = favoriteCount;
+
             article.article_id = undefined;
             article.user_id = undefined;
             if(favorited||tag) {

@@ -158,6 +158,7 @@ try{
   }
   if(req.body.user.password)
   {   
+    console.log("password")
 
     updateuser.password=req.body.user.password;
   }
